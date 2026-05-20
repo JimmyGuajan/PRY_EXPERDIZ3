@@ -1,0 +1,23 @@
+# Configuración de IA
+# Copia este archivo a config.yaml y completa con tus credenciales reales
+# NOTA: config.yaml está en .gitignore para proteger tus credenciales
+
+# Configuración de Azure OpenAI (opcional)
+azure_openai:
+  api_key: "tu_api_key_azure_aqui"
+  api_endpoint: "https://openaiinteligenciainformacion.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview"
+  deployment_name: "gpt-4o"
+  api_version: "2024-08-01-preview"
+
+# Configuración de Google AI Studio (Gemini) (opcional)
+google_ai:
+  api_key: "tu_api_key_gemini_aqui"
+  model: "gemini-1.5-pro"
+
+# Configuración de la aplicación
+app:
+  max_file_size_mb: 50
+  allowed_extensions: [".xlsx", ".xls", ".csv"]
+  temperature: 0.7
+  max_tokens: 2000
+  ai_provider: "azure"  # Opciones: "azure" o "google"

@@ -1,6 +1,6 @@
 # 📊 Dashboard de Toma de Decisiones con IA
 
-Sistema de dashboard interactivo para toma de decisiones basado en análisis de datos con inteligencia artificial usando Azure OpenAI y Streamlit.
+Sistema de dashboard interactivo para toma de decisiones basado en análisis de datos con inteligencia artificial usando Azure OpenAI, Google AI Studio (Gemini) y Streamlit.
 
 ## 🚀 Características
 
@@ -10,6 +10,8 @@ Sistema de dashboard interactivo para toma de decisiones basado en análisis de 
 - **Preguntas Interactivas**: Haz preguntas específicas sobre tus datos
 - **Visualizaciones**: Múltiples tipos de gráficos interactivos
 - **Detección de Preguntas**: Identifica automáticamente columnas con preguntas
+- **Múltiples Proveedores de IA**: Soporte para Azure OpenAI y Google AI Studio (Gemini)
+- **Reporte Automático**: Generación automática de dashboards con gráficos interesantes
 
 ## 📋 Requisitos
 
@@ -44,17 +46,32 @@ pip install -r requirements.txt
 
 1. **Copiar el archivo de configuración de ejemplo**:
 ```bash
-copy config\config.yaml.example config\config.yaml
+copy config\config_template.yaml config\config.yaml
 ```
 
-2. **Editar `config/config.yaml`** con tus credenciales de Azure OpenAI:
+2. **Editar `config/config.yaml`** con tus credenciales:
+
+**Para Azure OpenAI:**
 ```yaml
 azure_openai:
-  api_key: "tu_api_key_aqui"
+  api_key: "tu_api_key_azure_aqui"
   api_endpoint: "https://openaiinteligenciainformacion.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview"
   deployment_name: "gpt-4o"
   api_version: "2024-08-01-preview"
 ```
+
+**Para Google AI Studio (Gemini):**
+```yaml
+google_ai:
+  api_key: "tu_api_key_gemini_aqui"
+  model: "gemini-1.5-pro"
+```
+
+**Obtener API Key de Google AI Studio:**
+1. Ve a [Google AI Studio](https://aistudio.google.com/app/apikey)
+2. Crea un nuevo proyecto o selecciona uno existente
+3. Genera una API Key
+4. Copia la API Key en tu archivo `config/config.yaml`
 
 ⚠️ **IMPORTANTE**: El archivo `config/config.yaml` está en `.gitignore` para proteger tus credenciales. No lo commits al repositorio.
 
@@ -69,11 +86,14 @@ streamlit run app.py
 
 3. **Cargar un archivo**: Sube un archivo Excel o CSV desde la sidebar
 
-4. **Explorar las funcionalidades**:
+4. **Seleccionar proveedor de IA**: Elige entre Azure OpenAI o Google AI Studio (Gemini) en la sidebar
+
+5. **Explorar las funcionalidades**:
    - **Pestaña Datos**: Explora la información general de tus datos
    - **Pestaña Análisis IA**: Genera análisis inteligentes para toma de decisiones
    - **Pestaña Preguntar**: Haz preguntas específicas sobre tus datos
    - **Pestaña Visualizaciones**: Crea gráficos interactivos
+   - **Pestaña Reporte Automático**: Genera un reporte automático con gráficos interesantes
 
 ## 📁 Estructura del Proyecto
 
@@ -84,7 +104,7 @@ PRY_EXPERDIZ3/
 ├── requirements.txt       # Dependencias de Python
 ├── app.py                # Aplicación principal de Streamlit
 ├── config/               # Configuración
-│   ├── config.yaml.example  # Plantilla de configuración
+│   ├── config_template.yaml  # Plantilla de configuración
 │   └── config.yaml         # Configuración real (no en Git)
 ├── data/                 # Archivos de datos temporales
 │   └── .gitkeep
@@ -92,6 +112,7 @@ PRY_EXPERDIZ3/
     ├── __init__.py
     ├── data_processor.py    # Procesamiento de datos
     ├── ai_service.py        # Integración con Azure OpenAI
+    ├── google_ai_service.py # Integración con Google AI Studio
     ├── decision_engine.py  # Motor de decisiones
     └── dashboard.py         # Visualizaciones
 ```
@@ -101,7 +122,7 @@ PRY_EXPERDIZ3/
 - Las credenciales de API se almacenan en `config/config.yaml`
 - Este archivo está excluido del control de versiones por `.gitignore`
 - Nunca compartas tu archivo `config/config.yaml`
-- Usa `config/config.yaml.example` como plantilla
+- Usa `config/config_template.yaml` como plantilla
 
 ## 📊 Formatos de Archivo Soportados
 
@@ -110,12 +131,21 @@ PRY_EXPERDIZ3/
 
 ## 🤖 Funcionalidades de IA
 
-El sistema utiliza Azure OpenAI (GPT-4o) para:
+El sistema soporta múltiples proveedores de IA:
 
+**Azure OpenAI (GPT-4o):**
 1. **Análisis de Datos**: Genera resúmenes ejecutivos y insights clave
 2. **Sugerencias de Decisión**: Proporciona recomendaciones accionables
 3. **Respuestas a Preguntas**: Responde preguntas específicas sobre los datos
 4. **Sugerencias de Visualización**: Recomienda los mejores gráficos para tus datos
+
+**Google AI Studio (Gemini):**
+1. **Análisis de Datos**: Genera resúmenes ejecutivos y insights clave
+2. **Sugerencias de Decisión**: Proporciona recomendaciones accionables
+3. **Respuestas a Preguntas**: Responde preguntas específicas sobre los datos
+4. **Sugerencias de Visualización**: Recomienda los mejores gráficos para tus datos
+
+Puedes cambiar entre proveedores desde la sidebar de la aplicación.
 
 ## 📈 Tipos de Visualizaciones
 
@@ -129,7 +159,7 @@ El sistema utiliza Azure OpenAI (GPT-4o) para:
 ## 🐛 Solución de Problemas
 
 ### Error: "No se encontró config.yaml"
-- Asegúrate de copiar `config.yaml.example` a `config.yaml`
+- Asegúrate de copiar `config_template.yaml` a `config.yaml`
 - Completa tus credenciales en el archivo copiado
 
 ### Error: "No se han configurado las credenciales"

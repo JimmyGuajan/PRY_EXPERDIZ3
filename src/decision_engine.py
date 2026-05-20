@@ -2,24 +2,45 @@
 Módulo de análisis y generación de decisiones
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from .data_processor import DataProcessor
 from .ai_service import AzureOpenAIService
+from .google_ai_service import GoogleAIService
 
 
 class DecisionEngine:
     """Motor para análisis de datos y generación de decisiones"""
     
-    def __init__(self, ai_service: AzureOpenAIService):
+    def __init__(self, azure_service: Optional[AzureOpenAIService] = None, google_service: Optional[GoogleAIService] = None):
         """
         Inicializa el motor de decisiones
         
         Args:
-            ai_service: Servicio de Azure OpenAI
+            azure_service: Servicio de Azure OpenAI (opcional)
+            google_service: Servicio de Google AI Studio (opcional)
         """
-        self.ai_service = ai_service
+        self.azure_service = azure_service
+        self.google_service = google_service
+        self.ai_service = azure_service if azure_service else google_service
         self.data_processor = DataProcessor()
         self.last_analysis = None
+        self.current_provider = "azure" if azure_service else "google"
+    
+    def set_ai_provider(self, provider: str) -> None:
+        """
+        Cambia el proveedor de IA
+        
+        Args:
+            provider: "azure" o "google"
+        """
+        if provider == "azure" and self.azure_service:
+            self.ai_service = self.azure_service
+            self.current_provider = "azure"
+        elif provider == "google" and self.google_service:
+            self.ai_service = self.google_service
+            self.current_provider = "google"
+        else:
+            raise ValueError(f"Proveedor {provider} no disponible")
     
     def load_data(self, file_path: str) -> Dict[str, Any]:
         """

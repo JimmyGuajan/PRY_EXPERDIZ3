@@ -2,7 +2,6 @@
 .env
 config.yaml
 config.yml
-config.yaml.example
 *.key
 secrets.json
 

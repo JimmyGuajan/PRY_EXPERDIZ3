@@ -12,6 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from src.data_processor import DataProcessor
 from src.ai_service import AzureOpenAIService
+from src.google_ai_service import GoogleAIService
 from src.decision_engine import DecisionEngine
 from src.dashboard import Dashboard
 
@@ -37,15 +38,30 @@ with st.sidebar:
     
     if not config_exists:
         st.warning("⚠️ No se encontró config.yaml")
-        st.info("Por favor copia config/config.yaml.example a config/config.yaml y completa tus credenciales")
+        st.info("Por favor copia config/config_template.yaml a config/config.yaml y completa tus credenciales")
         st.stop()
+    
+    # Selector de proveedor de IA
+    st.subheader("🤖 Proveedor de IA")
+    ai_provider = st.selectbox(
+        "Selecciona el proveedor de IA:",
+        ["Azure OpenAI", "Google AI Studio (Gemini)"],
+        index=0
+    )
     
     # Inicializar servicios
     try:
-        ai_service = AzureOpenAIService()
-        decision_engine = DecisionEngine(ai_service)
+        azure_service = AzureOpenAIService()
+        google_service = GoogleAIService()
+        
+        # Determinar qué servicio usar basado en la selección
+        if ai_provider == "Azure OpenAI":
+            decision_engine = DecisionEngine(azure_service=azure_service)
+        else:
+            decision_engine = DecisionEngine(google_service=google_service)
+        
         dashboard = Dashboard()
-        st.success("✅ Servicios inicializados correctamente")
+        st.success(f"✅ Servicios inicializados correctamente ({ai_provider})")
     except Exception as e:
         st.error(f"❌ Error al inicializar servicios: {str(e)}")
         st.stop()
